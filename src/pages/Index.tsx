@@ -42,21 +42,21 @@ const Index = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl w-full px-4 mt-8">
-          <div className="glass p-10 text-center animate-float-slow group hover:bg-white/[0.12] transition-all duration-500">
+          <div className="glass p-10 text-center group hover:bg-white/[0.12] transition-all duration-500">
             <Calendar className="w-12 h-12 mx-auto mb-6 text-white/80 group-hover:text-white transition-colors duration-500" />
             <h3 className="text-xl font-semibold mb-4 tracking-tight">Smart Calendar</h3>
             <p className="text-white/70 group-hover:text-white/80 transition-colors duration-500">
               Plan your time off with our intelligent calendar system
             </p>
           </div>
-          <div className="glass p-10 text-center animate-float-slow [animation-delay:200ms] group hover:bg-white/[0.12] transition-all duration-500">
+          <div className="glass p-10 text-center group hover:bg-white/[0.12] transition-all duration-500">
             <Globe className="w-12 h-12 mx-auto mb-6 text-white/80 group-hover:text-white transition-colors duration-500" />
             <h3 className="text-xl font-semibold mb-4 tracking-tight">Region Aware</h3>
             <p className="text-white/70 group-hover:text-white/80 transition-colors duration-500">
               Seamlessly handles UK and US holiday systems
             </p>
           </div>
-          <div className="glass p-10 text-center animate-float-slow [animation-delay:400ms] group hover:bg-white/[0.12] transition-all duration-500">
+          <div className="glass p-10 text-center group hover:bg-white/[0.12] transition-all duration-500">
             <Users className="w-12 h-12 mx-auto mb-6 text-white/80 group-hover:text-white transition-colors duration-500" />
             <h3 className="text-xl font-semibold mb-4 tracking-tight">Team Sync</h3>
             <p className="text-white/70 group-hover:text-white/80 transition-colors duration-500">
