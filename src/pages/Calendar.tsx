@@ -1,115 +1,163 @@
-import { useState } from "react";
-import { Calendar as CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react";
+import * as React from "react";
+import { Calendar as CalendarIcon, BellRing, Brain, Building2, FileDown, Laptop } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { format, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isToday } from "date-fns";
-import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
 import { useToast } from "@/components/ui/use-toast";
+import { useNavigate } from "react-router-dom";
 
-const Calendar = () => {
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+const CalendarPage = () => {
+  const [date, setDate] = React.useState<Date | undefined>(new Date());
   const { toast } = useToast();
+  const navigate = useNavigate();
 
-  const days = eachDayOfInterval({
-    start: startOfMonth(currentDate),
-    end: endOfMonth(currentDate),
-  });
+  console.log("[Calendar] Rendering calendar page with date:", date);
 
-  const handlePreviousMonth = () => setCurrentDate(subMonths(currentDate, 1));
-  const handleNextMonth = () => setCurrentDate(addMonths(currentDate, 1));
-
-  const handleDateSelect = (date: Date) => {
-    setSelectedDate(date);
+  // Mock integration functions
+  const handleExport = () => {
+    console.log("[Calendar] Exporting calendar data");
     toast({
-      title: "Date selected",
-      description: `You selected ${format(date, 'MMMM d, yyyy')}`,
+      title: "Calendar Exported",
+      description: "Your calendar has been exported to iCal format.",
+    });
+  };
+
+  const handleAIRecommendation = () => {
+    console.log("[Calendar] Requesting AI recommendations");
+    toast({
+      title: "AI Recommendation",
+      description: "Based on your team's schedule, May 15-22 would be an optimal time for your vacation.",
+    });
+  };
+
+  const handleWellnessCheck = () => {
+    console.log("[Calendar] Checking wellness metrics");
+    toast({
+      title: "Wellness Check",
+      description: "Your team's wellness score is 92/100. Great job maintaining work-life balance!",
+    });
+  };
+
+  const handleEnterpriseSync = () => {
+    console.log("[Calendar] Syncing with enterprise systems");
+    toast({
+      title: "Enterprise Sync Complete",
+      description: "Calendar synchronized with HR management system.",
     });
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 relative z-10">
-      <Card className="glass p-6 animate-fade-in">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center space-x-2">
-            <CalendarIcon className="w-6 h-6" />
-            <h1 className="text-2xl font-bold">Leave Calendar</h1>
+    <div className="min-h-screen bg-[#4B0082] p-6 relative">
+      {/* Background effect similar to Index page */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1534796636912-3b95b3ab5986')] bg-cover opacity-[0.02]" />
+      </div>
+
+      {/* Header with navigation */}
+      <div className="flex items-center justify-between mb-8 relative z-10">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-white/20 to-white/10 flex items-center justify-center text-white backdrop-blur-sm border border-white/10">
+            a
           </div>
-          <div className="flex items-center space-x-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handlePreviousMonth}
-              className="hover:bg-white/10"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </Button>
-            <span className="text-lg font-medium">
-              {format(currentDate, "MMMM yyyy")}
-            </span>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleNextMonth}
-              className="hover:bg-white/10"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </Button>
+          <span className="text-white text-xl font-light tracking-wide">alfie</span>
+        </div>
+        <Button 
+          variant="ghost" 
+          className="text-white hover:bg-white/10"
+          onClick={() => navigate('/')}
+        >
+          Back to Home
+        </Button>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 relative z-10">
+        {/* Main Calendar Section */}
+        <Card className="glass lg:col-span-2 p-6">
+          <div className="flex items-center gap-2 mb-6">
+            <CalendarIcon className="w-5 h-5 text-primary" />
+            <h2 className="text-xl font-semibold">Leave Calendar</h2>
           </div>
-        </div>
-
-        <div className="grid grid-cols-7 gap-1 mb-2">
-          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-            <div key={day} className="text-center text-sm font-medium text-white/60 p-2">
-              {day}
-            </div>
-          ))}
-        </div>
-
-        <div className="grid grid-cols-7 gap-1">
-          {Array.from({ length: startOfMonth(currentDate).getDay() }).map((_, i) => (
-            <div key={`empty-${i}`} className="calendar-day opacity-0"></div>
-          ))}
-          {days.map((day) => (
-            <div
-              key={day.toISOString()}
-              className={cn(
-                "calendar-day",
-                !isSameMonth(day, currentDate) && "text-white/40",
-                isToday(day) && "today",
-                selectedDate && isSameMonth(day, selectedDate) && day.getDate() === selectedDate.getDate() && "selected"
-              )}
-              onClick={() => handleDateSelect(day)}
-            >
-              {format(day, "d")}
-            </div>
-          ))}
-        </div>
-      </Card>
-
-      {/* Floating cards with features */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-        <Card className="glass p-6 animate-float">
-          <h3 className="text-lg font-semibold mb-2">Smart Calendar</h3>
-          <p className="text-sm text-white/70">
-            Plan your time off with our intelligent calendar system
-          </p>
+          <Calendar
+            mode="single"
+            selected={date}
+            onSelect={setDate}
+            className="rounded-md border-white/10 bg-white/5 p-4"
+          />
         </Card>
-        <Card className="glass p-6 animate-float [animation-delay:200ms]">
-          <h3 className="text-lg font-semibold mb-2">Region Aware</h3>
-          <p className="text-sm text-white/70">
-            Seamlessly handles UK and US holiday systems
-          </p>
-        </Card>
-        <Card className="glass p-6 animate-float [animation-delay:400ms]">
-          <h3 className="text-lg font-semibold mb-2">Team Sync</h3>
-          <p className="text-sm text-white/70">
-            Coordinate leave with your team effortlessly
-          </p>
-        </Card>
+
+        {/* Integrations Panel */}
+        <div className="space-y-4">
+          {/* AI Integration */}
+          <Card className="glass p-4 hover:bg-white/[0.12] transition-all duration-300">
+            <CardContent className="p-0">
+              <Button 
+                variant="ghost" 
+                className="w-full flex items-center justify-between"
+                onClick={handleAIRecommendation}
+              >
+                <div className="flex items-center gap-3">
+                  <Brain className="w-5 h-5" />
+                  <span>AI Recommendations</span>
+                </div>
+                <span className="text-xs text-white/60">Available</span>
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Data Export */}
+          <Card className="glass p-4 hover:bg-white/[0.12] transition-all duration-300">
+            <CardContent className="p-0">
+              <Button 
+                variant="ghost" 
+                className="w-full flex items-center justify-between"
+                onClick={handleExport}
+              >
+                <div className="flex items-center gap-3">
+                  <FileDown className="w-5 h-5" />
+                  <span>Export Calendar</span>
+                </div>
+                <span className="text-xs text-white/60">iCal, PDF</span>
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Wellness Integration */}
+          <Card className="glass p-4 hover:bg-white/[0.12] transition-all duration-300">
+            <CardContent className="p-0">
+              <Button 
+                variant="ghost" 
+                className="w-full flex items-center justify-between"
+                onClick={handleWellnessCheck}
+              >
+                <div className="flex items-center gap-3">
+                  <BellRing className="w-5 h-5" />
+                  <span>Wellness Check</span>
+                </div>
+                <span className="text-xs text-white/60">92/100</span>
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Enterprise Integration */}
+          <Card className="glass p-4 hover:bg-white/[0.12] transition-all duration-300">
+            <CardContent className="p-0">
+              <Button 
+                variant="ghost" 
+                className="w-full flex items-center justify-between"
+                onClick={handleEnterpriseSync}
+              >
+                <div className="flex items-center gap-3">
+                  <Building2 className="w-5 h-5" />
+                  <span>Enterprise Sync</span>
+                </div>
+                <span className="text-xs text-white/60">Connected</span>
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
 };
 
-export default Calendar;
+export default CalendarPage;
