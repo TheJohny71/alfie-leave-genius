@@ -30,7 +30,7 @@
     @apply bg-[#4B0082] min-h-screen text-white relative overflow-x-hidden;
   }
 
-  /* Enhanced star background effect */
+  /* Enhanced star background effect with smoother animation */
   body::before {
     content: '';
     position: fixed;
@@ -44,35 +44,53 @@
       radial-gradient(circle at center, white 0.2px, transparent 0.7px);
     background-size: 48px 48px, 36px 36px, 24px 24px;
     background-position: 0 0, 12px 12px, 24px 24px;
-    animation: twinkle 8s linear infinite;
+    animation: twinkle 12s ease-in-out infinite;
     z-index: 0;
-    opacity: 0.2;
+    opacity: 0.15;
     transform: translateZ(0);
+    will-change: transform, opacity;
   }
 
   @keyframes twinkle {
     0% {
       transform: translate(0, 0) rotate(0deg);
-      opacity: 0.2;
+      opacity: 0.15;
     }
     25% {
-      opacity: 0.3;
-    }
-    50% {
-      transform: translate(-25%, -25%) rotate(180deg);
       opacity: 0.2;
     }
+    50% {
+      transform: translate(-15%, -15%) rotate(180deg);
+      opacity: 0.15;
+    }
     75% {
-      opacity: 0.3;
+      opacity: 0.2;
     }
     100% {
       transform: translate(0, 0) rotate(360deg);
-      opacity: 0.2;
+      opacity: 0.15;
     }
   }
 
   .glass {
-    @apply bg-[#4B0082]/40 backdrop-blur-sm border border-white/10 rounded-3xl shadow-xl;
+    @apply bg-white/[0.08] backdrop-blur-sm border border-white/10 rounded-3xl shadow-xl;
+  }
+
+  /* Enhanced floating animation */
+  @keyframes float {
+    0% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+    100% {
+      transform: translateY(0px);
+    }
+  }
+
+  .animate-float {
+    animation: float 4s ease-in-out infinite;
   }
 }
 
