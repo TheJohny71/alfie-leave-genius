@@ -2,7 +2,13 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
 const Index = () => {
+  console.log("[Index] Rendering welcome page");
   const navigate = useNavigate();
+
+  const handleNavigateToCalendar = () => {
+    console.log("[Index] Navigating to calendar");
+    navigate('/calendar');
+  };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center relative z-10">
@@ -11,7 +17,7 @@ const Index = () => {
         <p className="text-xl text-white/80 mb-8">Life's best stories happen off the clock.</p>
         <p className="text-lg text-white/60 mb-8">Plan smarter. Live fuller.</p>
         <Button 
-          onClick={() => navigate('/calendar')}
+          onClick={handleNavigateToCalendar}
           className="bg-primary hover:bg-primary/90 text-white px-8 py-6 text-lg"
         >
           Plan Smarter Today →
