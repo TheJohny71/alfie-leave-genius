@@ -29,7 +29,7 @@ export default {
           foreground: "#ffffff",
         },
         secondary: {
-          DEFAULT: "rgba(255,255,255,0.1)",
+          DEFAULT: "rgba(255,255,255,0.08)",
           foreground: "#ffffff",
         },
         destructive: {
@@ -37,19 +37,19 @@ export default {
           foreground: "hsl(var(--destructive-foreground))",
         },
         muted: {
-          DEFAULT: "rgba(255,255,255,0.1)",
-          foreground: "rgba(255,255,255,0.5)",
+          DEFAULT: "rgba(255,255,255,0.08)",
+          foreground: "rgba(255,255,255,0.6)",
         },
         accent: {
           DEFAULT: "#7E69AB",
           foreground: "#ffffff",
         },
         popover: {
-          DEFAULT: "rgba(30,20,60,0.95)",
+          DEFAULT: "rgba(30,20,60,0.98)",
           foreground: "#ffffff",
         },
         card: {
-          DEFAULT: "rgba(255,255,255,0.1)",
+          DEFAULT: "rgba(255,255,255,0.08)",
           foreground: "#ffffff",
         },
       },
@@ -74,6 +74,14 @@ export default {
         float: {
           "0%, 100%": { transform: "translateY(0)" },
           "50%": { transform: "translateY(-10px)" },
+        },
+        "scale-in": {
+          "0%": { transform: "scale(0.95)", opacity: "0" },
+          "100%": { transform: "scale(1)", opacity: "1" }
+        },
+        "blur-in": {
+          "0%": { backdropFilter: "blur(0px)" },
+          "100%": { backdropFilter: "blur(12px)" }
         }
       },
       animation: {
@@ -81,6 +89,8 @@ export default {
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in": "fade-in 0.3s ease-out",
         "float": "float 3s ease-in-out infinite",
+        "scale-in": "scale-in 0.2s cubic-bezier(0.2, 0, 0, 1)",
+        "blur-in": "blur-in 0.3s cubic-bezier(0.2, 0, 0, 1)"
       },
     },
   },

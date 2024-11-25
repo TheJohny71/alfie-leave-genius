@@ -4,13 +4,10 @@
 
 @layer base {
   :root {
-    /* Primary Colors */
     --primary: #4B0082;
     --background: #FFFFFF;
     --surface: #FAFAFA;
     --surface-alt: #F8F8F8;
-
-    /* Status Colors */
     --pto: rgba(75, 0, 130, 0.2);
     --holiday: rgba(231, 76, 60, 0.2);
     --weekend: rgba(46, 204, 113, 0.2);
@@ -18,26 +15,18 @@
     --coverage-low: rgba(231, 76, 60, 0.4);
     --warning: #DC2626;
     --warning-bg: #FEF2F2;
-
-    /* Text Colors */
     --text-primary: #333333;
     --text-secondary: #666666;
     --text-accent: #4B0082;
     --text-white: #FFFFFF;
-
-    /* Font Family */
-    --font-primary: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 
+    --font-primary: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 
                    'Segoe UI', Roboto, sans-serif;
-
-    /* Spacing */
     --spacing-xs: 0.25rem;
     --spacing-sm: 0.5rem;
     --spacing-md: 1rem;
     --spacing-lg: 1.25rem;
     --spacing-xl: 1.5rem;
     --spacing-2xl: 2rem;
-
-    /* Border Radius */
     --radius-sm: 0.25rem;
     --radius-md: 0.5rem;
     --radius-lg: 1rem;
@@ -46,6 +35,7 @@
 
   body {
     @apply bg-[var(--primary)] min-h-screen text-[var(--text-primary)] relative overflow-x-hidden font-[var(--font-primary)];
+    -webkit-font-smoothing: antialiased;
   }
 
   body::before {
@@ -69,60 +59,34 @@
   }
 
   @keyframes twinkle {
-    0% {
+    0%, 100% {
       transform: translate(0, 0) rotate(0deg);
       opacity: 0.15;
     }
-    25% {
-      opacity: 0.2;
-    }
     50% {
-      transform: translate(-15%, -15%) rotate(180deg);
-      opacity: 0.15;
-    }
-    75% {
+      transform: translate(-5%, -5%) rotate(180deg);
       opacity: 0.2;
-    }
-    100% {
-      transform: translate(0, 0) rotate(360deg);
-      opacity: 0.15;
     }
   }
 
   .glass {
-    @apply bg-white/[0.08] backdrop-blur-sm border border-white/10 rounded-3xl shadow-xl;
+    @apply bg-white/[0.08] backdrop-blur-md border border-white/10 rounded-3xl shadow-xl transition-all duration-300;
   }
 
-  @keyframes float-slow {
-    0% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-8px);
-    }
-    100% {
-      transform: translateY(0px);
-    }
+  .calendar-day {
+    @apply relative p-2 hover:bg-white/5 transition-colors rounded-md cursor-pointer;
   }
 
-  .animate-float-slow {
-    animation: float-slow 6s ease-in-out infinite;
+  .calendar-day.selected {
+    @apply bg-primary/20;
   }
-}
 
-.calendar-day {
-  @apply relative p-2 hover:bg-white/5 transition-colors rounded-md cursor-pointer;
-}
+  .calendar-day.today {
+    @apply font-bold;
+  }
 
-.calendar-day.selected {
-  @apply bg-primary/20;
-}
-
-.calendar-day.today {
-  @apply font-bold;
-}
-
-.calendar-day.today::after {
-  content: '';
-  @apply absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary rounded-full;
+  .calendar-day.today::after {
+    content: '';
+    @apply absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary rounded-full;
+  }
 }
