@@ -27,7 +27,7 @@
   }
 
   body {
-    @apply bg-gradient-to-b from-[#4B0082] to-[#663399] min-h-screen text-white relative overflow-x-hidden;
+    @apply bg-[#4B0082] min-h-screen text-white relative overflow-x-hidden;
   }
 
   /* Star background effect */
@@ -41,11 +41,11 @@
     background-image: radial-gradient(circle at center, white 0.1px, transparent 0.5px);
     background-size: 48px 48px;
     z-index: 0;
-    opacity: 0.4;
+    opacity: 0.15;
   }
 
   .glass {
-    @apply bg-[#663399]/40 backdrop-blur-sm border border-white/10 rounded-2xl shadow-xl;
+    @apply bg-[#4B0082]/40 backdrop-blur-sm border border-white/10 rounded-3xl shadow-xl;
   }
 }
 
