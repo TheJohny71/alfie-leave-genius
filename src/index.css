@@ -30,7 +30,6 @@
     @apply bg-[#4B0082] min-h-screen text-white relative overflow-x-hidden;
   }
 
-  /* Enhanced star background effect with smoother animation */
   body::before {
     content: '';
     position: fixed;
@@ -76,8 +75,7 @@
     @apply bg-white/[0.08] backdrop-blur-sm border border-white/10 rounded-3xl shadow-xl;
   }
 
-  /* Enhanced floating animation */
-  @keyframes float {
+  @keyframes float-slow {
     0% {
       transform: translateY(0px);
     }
@@ -89,8 +87,8 @@
     }
   }
 
-  .animate-float {
-    animation: float 4s ease-in-out infinite;
+  .animate-float-slow {
+    animation: float-slow 6s ease-in-out infinite;
   }
 }
 
