@@ -1,3 +1,4 @@
+// src/components/calendar/LeavePlanningWizard.tsx
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -8,6 +9,8 @@ import { WizardStepIndicator } from "./WizardStepIndicator";
 import { WizardStep } from "./WizardStep";
 import { useStore } from "@/store/useStore";
 import { useLeaveRequest } from "@/hooks/useLeaveRequest";
+import { LoadingWrapper, LoadingButton } from "@/components/ui/loading-state";
+import { handleError } from "@/utils/errorHandler";
 
 const steps = [
   {
@@ -35,36 +38,43 @@ export const LeavePlanningWizard = () => {
   const { toast } = useToast();
   const { mutate: submitLeaveRequest, isPending } = useLeaveRequest();
   const { calendar } = useStore((state) => state.user);
+  const setLoadingState = useStore((state) => state.setLoadingState);
+  const loadingState = useStore((state) => state.ui.loading.leaves);
 
-  console.log("[LeavePlanningWizard] Rendering wizard at step:", currentStep);
-
-  const handleExport = () => {
-    console.log("[LeavePlanningWizard] Exporting leave schedule");
-    submitLeaveRequest({
-      type: 'annual',
-      startDate: calendar.selectedDates[0],
-      endDate: calendar.selectedDates[calendar.selectedDates.length - 1],
-    });
+  const handleExport = async () => {
+    try {
+      setLoadingState('leaves', 'loading');
+      await submitLeaveRequest({
+        type: 'annual',
+        startDate: calendar.selectedDates[0],
+        endDate: calendar.selectedDates[calendar.selectedDates.length - 1],
+      });
+      setLoadingState('leaves', 'idle');
+      toast({
+        title: "Success",
+        description: "Leave request submitted successfully"
+      });
+    } catch (error) {
+      handleError(error);
+    }
   };
 
   const handleNext = () => {
     if (currentStep < steps.length - 1) {
       setCurrentStep(prev => prev + 1);
-      console.log("[LeavePlanningWizard] Moving to next step:", currentStep + 1);
     }
   };
 
   const handleBack = () => {
     if (currentStep > 0) {
       setCurrentStep(prev => prev - 1);
-      console.log("[LeavePlanningWizard] Moving to previous step:", currentStep - 1);
     }
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+    <LoadingWrapper
+      loading={loadingState === 'loading'}
+      loadingMessage="Processing leave request..."
       className="glass p-6 max-w-2xl mx-auto rounded-2xl shadow-xl"
     >
       <WizardStepIndicator currentStep={currentStep} steps={steps} />
@@ -102,23 +112,24 @@ export const LeavePlanningWizard = () => {
             <Button
               variant="outline"
               onClick={handleBack}
-              disabled={currentStep === 0}
+              disabled={currentStep === 0 || loadingState === 'loading'}
               className="flex items-center space-x-2"
             >
               <ChevronLeft className="w-4 h-4" />
               <span>Back</span>
             </Button>
-            <Button
-              onClick={handleNext}
-              disabled={currentStep === steps.length - 1 || isPending}
+            <LoadingButton
+              onClick={currentStep === steps.length - 1 ? handleExport : handleNext}
+              loading={loadingState === 'loading'}
               className="flex items-center space-x-2 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+              disabled={currentStep === steps.length - 1 && isPending}
             >
-              <span>{currentStep === steps.length - 1 ? 'Finish' : 'Next'}</span>
+              <span>{currentStep === steps.length - 1 ? 'Submit' : 'Next'}</span>
               <ChevronRight className="w-4 h-4" />
-            </Button>
+            </LoadingButton>
           </div>
         </motion.div>
       </AnimatePresence>
-    </motion.div>
+    </LoadingWrapper>
   );
 };
