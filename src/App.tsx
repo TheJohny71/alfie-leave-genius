@@ -18,7 +18,8 @@ const RouteLogger = ({ children }: { children: React.ReactNode }) => {
       pathname: location.pathname,
       search: location.search,
       hash: location.hash,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      baseUrl: import.meta.env.VITE_BASE_URL
     });
 
     if (location.pathname === '/') {
@@ -31,12 +32,13 @@ const RouteLogger = ({ children }: { children: React.ReactNode }) => {
 
 const App = () => {
   console.log("[App] Initializing application with React Router");
+  const baseUrl = import.meta.env.VITE_BASE_URL || '/';
   
   return (
     <QueryClientProvider client={queryClient}>
       <RegionProvider>
         <TooltipProvider>
-          <BrowserRouter>
+          <BrowserRouter basename={baseUrl}>
             <RouteLogger>
               <Routes>
                 <Route path="/" element={<Index />} />
