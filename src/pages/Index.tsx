@@ -12,9 +12,19 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center relative z-10">
+    <div className="min-h-screen flex flex-col items-center relative z-10 overflow-hidden">
+      {/* Animated Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#2D2D2D] via-[#1E1E1E] to-[#000000] animate-gradient">
+        <div className="absolute inset-0 opacity-30">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_500px_at_50%_50%,#3a1f71,transparent)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_400px_at_70%_20%,#4b2c8f,transparent)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_600px_at_30%_80%,#2a1854,transparent)]" />
+        </div>
+        <div className="absolute inset-0 backdrop-blur-[100px] mix-blend-overlay opacity-50" />
+      </div>
+
       {/* Logo Section */}
-      <div className="absolute top-8 left-8 flex items-center gap-3">
+      <div className="absolute top-8 left-8 flex items-center gap-3 z-20">
         <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-white/20 to-white/10 flex items-center justify-center text-white backdrop-blur-sm border border-white/10">
           a
         </div>
@@ -22,9 +32,9 @@ const Index = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col items-center justify-center max-w-4xl mx-auto px-4">
+      <div className="flex-1 flex flex-col items-center justify-center max-w-4xl mx-auto px-4 relative z-20">
         <div className="text-center mb-20 animate-fade-in">
-          <h1 className="text-6xl font-bold mb-8 leading-tight tracking-[-0.02em] bg-clip-text text-transparent bg-gradient-to-b from-white to-white/80">
+          <h1 className="text-6xl font-bold mb-8 leading-tight tracking-[-0.02em] bg-clip-text text-transparent bg-gradient-to-r from-white via-white/90 to-white/80">
             Create moments for what matters...
           </h1>
           <p className="text-2xl text-white/85 mb-6 font-light">
@@ -44,21 +54,21 @@ const Index = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl w-full px-4 mt-8">
           <div className="glass p-10 text-center group hover:bg-white/[0.12] transition-all duration-500">
             <Calendar className="w-12 h-12 mx-auto mb-6 text-white/80 group-hover:text-white transition-colors duration-500" />
-            <h3 className="text-xl font-semibold mb-4 tracking-tight">Smart Calendar</h3>
+            <h3 className="text-xl font-semibold mb-4 tracking-tight text-white">Smart Calendar</h3>
             <p className="text-white/70 group-hover:text-white/80 transition-colors duration-500">
               Plan your time off with our intelligent calendar system
             </p>
           </div>
           <div className="glass p-10 text-center group hover:bg-white/[0.12] transition-all duration-500">
             <Globe className="w-12 h-12 mx-auto mb-6 text-white/80 group-hover:text-white transition-colors duration-500" />
-            <h3 className="text-xl font-semibold mb-4 tracking-tight">Region Aware</h3>
+            <h3 className="text-xl font-semibold mb-4 tracking-tight text-white">Region Aware</h3>
             <p className="text-white/70 group-hover:text-white/80 transition-colors duration-500">
               Seamlessly handles UK and US holiday systems
             </p>
           </div>
           <div className="glass p-10 text-center group hover:bg-white/[0.12] transition-all duration-500">
             <Users className="w-12 h-12 mx-auto mb-6 text-white/80 group-hover:text-white transition-colors duration-500" />
-            <h3 className="text-xl font-semibold mb-4 tracking-tight">Team Sync</h3>
+            <h3 className="text-xl font-semibold mb-4 tracking-tight text-white">Team Sync</h3>
             <p className="text-white/70 group-hover:text-white/80 transition-colors duration-500">
               Coordinate leave with your team effortlessly
             </p>
