@@ -19,18 +19,6 @@ import { CalendarGrid } from '@/components/calendar/CalendarGrid';
 import { TeamMemberCard } from '@/components/calendar/TeamMemberCard';
 import { LeaveStats } from '@/components/calendar/LeaveStats';
 
-interface LeaveType {
-  label: string;
-  color: string;
-}
-
-const leaveTypes: Record<string, LeaveType> = {
-  annual: { label: 'Annual Leave', color: 'bg-blue-500' },
-  sick: { label: 'Sick Leave', color: 'bg-red-500' },
-  personal: { label: 'Personal Leave', color: 'bg-green-500' },
-  other: { label: 'Other', color: 'bg-purple-500' }
-};
-
 const Calendar = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -44,7 +32,7 @@ const Calendar = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 to-purple-950 text-white p-4">
+    <div className="min-h-screen bg-gradient-to-br from-purple-100 to-purple-300 text-purple-900 p-4">
       {/* Navigation */}
       <nav className="flex justify-between items-center mb-6 bg-white/5 rounded-xl p-3 backdrop-blur-sm">
         <div className="flex items-center space-x-4">

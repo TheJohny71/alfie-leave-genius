@@ -32,7 +32,7 @@ export const LeaveRequest = () => {
     });
 
     toast({
-      title: "Leave Request Submitted",
+      title: getTerminology('request'),
       description: `Your ${getTerminology('leave')} request has been submitted for review.`,
     });
   };
@@ -40,15 +40,15 @@ export const LeaveRequest = () => {
   return (
     <div className="glass p-6 rounded-lg space-y-6">
       <div className="space-y-2">
-        <h3 className="text-lg font-semibold">Request {getTerminology('leave')}</h3>
+        <h3 className="text-lg font-semibold">{getTerminology('request')}</h3>
         <p className="text-sm text-white/70">
-          Select your dates and leave type below
+          Select your dates and {getTerminology('leave')} type below
         </p>
       </div>
 
       <Select value={leaveType} onValueChange={setLeaveType}>
         <SelectTrigger>
-          <SelectValue placeholder="Select leave type" />
+          <SelectValue placeholder={`Select ${getTerminology('leave')} type`} />
         </SelectTrigger>
         <SelectContent>
           {leaveTypes[region].map((type) => (
@@ -68,7 +68,7 @@ export const LeaveRequest = () => {
 
       <div className="flex justify-end">
         <Button onClick={handleSubmit} disabled={!leaveType || selectedDates.length === 0}>
-          Submit Request
+          {getTerminology('submit')}
         </Button>
       </div>
     </div>
