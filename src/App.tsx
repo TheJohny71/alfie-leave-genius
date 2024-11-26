@@ -8,7 +8,14 @@ import { RegionProvider } from "@/contexts/RegionContext";
 import Index from "./pages/Index";
 import Calendar from "./pages/Calendar";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      staleTime: 5 * 60 * 1000,
+    },
+  },
+});
 
 const RouteLogger = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
@@ -20,7 +27,8 @@ const RouteLogger = ({ children }: { children: React.ReactNode }) => {
       hash: location.hash,
       timestamp: new Date().toISOString(),
       baseUrl: import.meta.env.VITE_BASE_URL,
-      fullUrl: window.location.href
+      fullUrl: window.location.href,
+      origin: window.location.origin
     });
 
     if (location.pathname === '/') {
@@ -34,7 +42,9 @@ const RouteLogger = ({ children }: { children: React.ReactNode }) => {
 const App = () => {
   console.log("[App] Initializing with config:", {
     baseUrl: import.meta.env.VITE_BASE_URL,
-    nodeEnv: process.env.NODE_ENV
+    nodeEnv: process.env.NODE_ENV,
+    origin: window.location.origin,
+    href: window.location.href
   });
   
   const baseUrl = import.meta.env.VITE_BASE_URL || '/';
