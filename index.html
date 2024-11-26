@@ -9,9 +9,10 @@
     <meta property="og:image" content="/og-image.png" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <script>
-      // Dynamically set base href
+      // Dynamically set base href based on environment
       const baseUrl = import.meta.env.VITE_BASE_URL || '/';
       document.write(`<base href="${baseUrl}">`);
+      console.log('[Index] Base URL configured:', baseUrl);
     </script>
   </head>
 
