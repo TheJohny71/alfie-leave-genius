@@ -5,7 +5,6 @@ import {
   User, 
   Settings, 
   Globe, 
-  MoreHorizontal,
   Brain,
   ChevronRight,
   CalendarIcon,
@@ -35,7 +34,7 @@ const Calendar = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-purple-200 text-purple-900 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50/80 to-purple-200/80 text-purple-900 p-4">
       {/* Navigation */}
       <nav className="flex justify-between items-center mb-6 bg-white/10 rounded-xl p-3 backdrop-blur-sm border border-white/20 shadow-lg">
         <div className="flex items-center space-x-4">
@@ -112,9 +111,6 @@ const Calendar = () => {
             <CardContent className="p-6">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="font-semibold text-lg text-purple-800">Team Schedule</h3>
-                <button className="text-purple-400 hover:text-purple-600 transition-colors">
-                  <MoreHorizontal className="w-5 h-5" />
-                </button>
               </div>
               <div className="space-y-4">
                 {[

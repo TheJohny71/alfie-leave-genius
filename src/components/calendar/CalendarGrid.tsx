@@ -53,16 +53,21 @@ export const CalendarGrid = ({
               onClick={() => onDateSelect(date)}
               className={cn(
                 "relative min-h-[80px] p-2 rounded-lg cursor-pointer transition-all duration-200",
-                isSelected ? "bg-purple-500 text-white shadow-lg" : "hover:bg-white/10",
+                isSelected ? "bg-purple-500/80 text-white shadow-lg" : "hover:bg-white/20",
                 isToday ? "ring-2 ring-purple-400" : "",
-                holiday ? "bg-red-100 hover:bg-red-200" : ""
+                holiday ? "bg-red-100/20 hover:bg-red-200/30" : "",
+                "backdrop-blur-sm"
               )}
             >
-              <span className={cn("text-sm", isSelected && "font-bold")}>
+              <span className={cn(
+                "text-sm",
+                isSelected ? "font-bold" : "",
+                holiday ? "text-red-600" : ""
+              )}>
                 {date}
               </span>
               {holiday && (
-                <div className="absolute bottom-1 left-1 right-1 text-xs text-red-600 truncate">
+                <div className="absolute bottom-1 left-1 right-1 text-xs text-red-600 truncate bg-white/40 rounded px-1">
                   {getHolidayName(date)}
                 </div>
               )}
