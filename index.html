@@ -6,9 +6,13 @@
     <title>alfie-leave-genius</title>
     <meta name="description" content="Lovable Generated Project" />
     <meta name="author" content="Lovable" />
-    <meta property="og:image" content="%VITE_BASE_URL%/og-image.png" />
-    <link rel="icon" type="image/x-icon" href="%VITE_BASE_URL%/favicon.ico">
-    <base href="%VITE_BASE_URL%">
+    <meta property="og:image" content="/og-image.png" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <script>
+      // Dynamically set base href
+      const baseUrl = import.meta.env.VITE_BASE_URL || '/';
+      document.write(`<base href="${baseUrl}">`);
+    </script>
   </head>
 
   <body>

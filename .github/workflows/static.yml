@@ -44,14 +44,13 @@ jobs:
         run: |
           REPO_NAME="${GITHUB_REPOSITORY#*/}"
           echo "Setting base URL to /${REPO_NAME}/"
-          echo "VITE_BASE_URL=/${REPO_NAME}/" >> $GITHUB_ENV
+          echo "VITE_BASE_URL=/${REPO_NAME}" >> .env
           echo "Current env vars:"
           env | sort
         
       - name: Build
         run: npm run build
         env:
-          VITE_BASE_URL: ${{ env.VITE_BASE_URL }}
           NODE_ENV: production
           
       - name: Verify build output
