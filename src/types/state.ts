@@ -1,3 +1,4 @@
+// src/types/state.ts
 export type UserRole = 'admin' | 'manager' | 'employee';
 export type ViewType = 'calendar' | 'requests' | 'team' | 'settings';
 export type ModalType = 'leaveRequest' | 'confirmation' | 'error';
@@ -5,6 +6,7 @@ export type ErrorType = 'validation' | 'network' | 'integration' | 'auth' | 'unk
 export type CalendarView = 'month' | 'week' | 'agenda';
 export type LeaveType = 'annual' | 'sick' | 'unpaid' | 'other';
 export type AvailabilityStatus = 'available' | 'unavailable' | 'leave' | 'holiday';
+export type LoadingState = 'idle' | 'loading' | 'error';
 
 export interface UserPreferences {
   theme: 'light' | 'dark';
@@ -48,6 +50,13 @@ export interface Notification {
   timestamp: Date;
 }
 
+export interface LoadingStates {
+  calendar: LoadingState;
+  leaves: LoadingState;
+  team: LoadingState;
+  general: LoadingState;
+}
+
 export interface GlobalState {
   user: {
     profile: {
@@ -80,10 +89,7 @@ export interface GlobalState {
       props: Record<string, any>;
     };
     notifications: Notification[];
-    loading: {
-      status: boolean;
-      message?: string;
-    };
+    loading: LoadingStates;
     errors: {
       type: ErrorType;
       message: string;
