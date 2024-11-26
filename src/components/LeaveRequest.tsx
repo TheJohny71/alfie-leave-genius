@@ -5,6 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useRegion } from '@/contexts/RegionContext';
 import { useToast } from "@/components/ui/use-toast";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 export const LeaveRequest = () => {
   const { region, getTerminology } = useRegion();
