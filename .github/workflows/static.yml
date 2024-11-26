@@ -32,10 +32,13 @@ jobs:
       - name: Install dependencies
         run: npm install
         
+      - name: Extract repository name
+        run: echo "REPO_NAME=$(echo '${{ github.repository }}' | cut -d'/' -f2)" >> $GITHUB_ENV
+        
       - name: Build
         run: npm run build
         env:
-          BASE_URL: ${{ github.event.repository.name }}
+          VITE_BASE_URL: /${{ env.REPO_NAME }}/
           
       - name: Setup Pages
         uses: actions/configure-pages@v4
