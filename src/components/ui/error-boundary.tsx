@@ -1,12 +1,13 @@
-// src/components/ErrorBoundary.tsx
+// src/components/ui/error-boundary.tsx
 import React from 'react';
-import { useStore } from '@/store/useStore';
 import { motion } from 'framer-motion';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useStore } from '@/store/useStore';
 
 interface Props {
   children: React.ReactNode;
+  fallback?: React.ReactNode;
 }
 
 interface State {
@@ -25,18 +26,26 @@ export class ErrorBoundary extends React.Component<Props, State> {
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.error('ErrorBoundary caught an error:', error, errorInfo);
+    const store = useStore.getState();
     
-    // Log to your error reporting service
-    // reportError(error, errorInfo);
+    store.addError({
+      type: 'unknown',
+      message: error.message
+    });
   }
 
   private handleReset = () => {
+    const store = useStore.getState();
+    store.clearErrors();
     this.setState({ hasError: false, error: undefined });
-    window.location.reload();
   };
 
   public render() {
     if (this.state.hasError) {
+      if (this.props.fallback) {
+        return this.props.fallback;
+      }
+
       return (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -56,7 +65,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
                   Something went wrong
                 </h2>
                 <p className="text-purple-200 text-sm">
-                  We apologize for the inconvenience. Please try refreshing the page.
+                  We apologize for the inconvenience. Please try again.
                 </p>
               </div>
 
@@ -73,7 +82,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
                 className="bg-white/10 hover:bg-white/20 text-white space-x-2 flex items-center justify-center w-full"
               >
                 <RefreshCw className="w-4 h-4" />
-                <span>Refresh Page</span>
+                <span>Try Again</span>
               </Button>
             </div>
           </div>
