@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { 
   Bell, 
   Search, 
@@ -19,19 +19,22 @@ import { CalendarGrid } from '@/components/calendar/CalendarGrid';
 import { TeamMemberCard } from '@/components/calendar/TeamMemberCard';
 import { LeaveStats } from '@/components/calendar/LeaveStats';
 
+interface LeaveType {
+  label: string;
+  color: string;
+}
+
+const leaveTypes: Record<string, LeaveType> = {
+  annual: { label: 'Annual Leave', color: 'bg-blue-500' },
+  sick: { label: 'Sick Leave', color: 'bg-red-500' },
+  personal: { label: 'Personal Leave', color: 'bg-green-500' },
+  other: { label: 'Other', color: 'bg-purple-500' }
+};
+
 const Calendar = () => {
-  const [selectedDates, setSelectedDates] = useState<number[]>([]);
-  const [currentMonth] = useState("November");
-  const [currentYear] = useState("2024");
   const navigate = useNavigate();
   const { toast } = useToast();
   const { region, setRegion } = useRegion();
-  
-  const teamMembers = [
-    { name: "Sarah Chen", status: "On Leave", dates: "Nov 24-26", avatar: "SC" },
-    { name: "Mike Ross", status: "Upcoming", dates: "Nov 28-30", avatar: "MR" },
-    { name: "Anna Smith", status: "Working", dates: "", avatar: "AS" }
-  ];
 
   const handleAIRecommendation = () => {
     toast({
@@ -80,19 +83,15 @@ const Calendar = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Calendar Section */}
         <div className="lg:col-span-2 space-y-6">
-          <Card className="bg-white/5 border-purple-500/20 backdrop-blur-sm">
-            <CardContent className="p-6">
-              <LeavePlanningWizard />
-            </CardContent>
-          </Card>
+          <LeavePlanningWizard />
 
           <Card className="bg-white/5 border-purple-500/20 backdrop-blur-sm">
             <CardContent className="p-6">
               <CalendarGrid
-                selectedDates={selectedDates}
-                onDateSelect={setSelectedDates}
-                currentMonth={currentMonth}
-                currentYear={currentYear}
+                selectedDates={[]}
+                onDateSelect={() => {}}
+                currentMonth="November"
+                currentYear="2024"
               />
             </CardContent>
           </Card>
@@ -107,7 +106,11 @@ const Calendar = () => {
                 </button>
               </div>
               <div className="space-y-4">
-                {teamMembers.map((member, index) => (
+                {[
+                  { name: "Sarah Chen", status: "On Leave", dates: "Nov 24-26", avatar: "SC" },
+                  { name: "Mike Ross", status: "Upcoming", dates: "Nov 28-30", avatar: "MR" },
+                  { name: "Anna Smith", status: "Working", dates: "", avatar: "AS" }
+                ].map((member, index) => (
                   <TeamMemberCard key={index} member={member} />
                 ))}
               </div>
