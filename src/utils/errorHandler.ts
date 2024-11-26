@@ -1,3 +1,4 @@
+// src/utils/errorHandler.ts
 import { useStore } from '@/store/useStore';
 import { ErrorType } from '@/types/state';
 import { toast } from '@/components/ui/use-toast';
@@ -20,17 +21,49 @@ export const handleError = (error: unknown) => {
   const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
   const errorType = error instanceof AppError ? error.type : 'unknown';
 
-  store.ui.errors.push({
+  // Add error to store
+  store.addError({
     type: errorType,
     message: errorMessage,
     field: error instanceof AppError ? error.field : undefined,
   });
 
+  // Show toast notification
   toast({
-    title: 'Error',
+    title: 'Error Occurred',
     description: errorMessage,
     variant: 'destructive',
   });
 
   return error;
+};
+
+export const withErrorHandling = <T extends (...args: any[]) => Promise<any>>(
+  fn: T,
+  loadingKey?: keyof GlobalState['ui']['loading']
+) => {
+  return async (...args: Parameters<T>): Promise<ReturnType<T>> => {
+    const store = useStore.getState();
+    
+    try {
+      if (loadingKey) {
+        store.setLoadingState(loadingKey, 'loading');
+      }
+      
+      const result = await fn(...args);
+      
+      if (loadingKey) {
+        store.setLoadingState(loadingKey, 'idle');
+      }
+      
+      return result;
+    } catch (error) {
+      if (loadingKey) {
+        store.setLoadingState(loadingKey, 'error');
+      }
+      
+      handleError(error);
+      throw error;
+    }
+  };
 };
