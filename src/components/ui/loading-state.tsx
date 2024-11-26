@@ -1,4 +1,4 @@
-// src/components/ui/loading.tsx
+// src/components/ui/loading-state.tsx
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
@@ -8,12 +8,14 @@ interface LoadingProps {
   fullscreen?: boolean;
   message?: string;
   className?: string;
+  variant?: 'default' | 'overlay';
 }
 
 export const Loading: React.FC<LoadingProps> = ({ 
   fullscreen = false, 
   message,
-  className 
+  className,
+  variant = 'default'
 }) => {
   if (fullscreen) {
     return (
@@ -28,7 +30,7 @@ export const Loading: React.FC<LoadingProps> = ({
             animate={{ rotate: 360 }}
             transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
           >
-            <Loader2 className="w-8 h-8 text-white" />
+            <Loader2 className="w-8 h-8 text-[#279989]" />
           </motion.div>
           {message && (
             <p className="text-white/80 text-sm">{message}</p>
@@ -38,13 +40,33 @@ export const Loading: React.FC<LoadingProps> = ({
     );
   }
 
+  if (variant === 'overlay') {
+    return (
+      <div className={cn(
+        "absolute inset-0 bg-purple-900/20 backdrop-blur-sm",
+        "flex items-center justify-center z-10",
+        className
+      )}>
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+        >
+          <Loader2 className="w-6 h-6 text-[#279989]" />
+        </motion.div>
+        {message && (
+          <span className="ml-3 text-sm text-white/80">{message}</span>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className={cn("flex items-center justify-center p-4", className)}>
       <motion.div
         animate={{ rotate: 360 }}
         transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
       >
-        <Loader2 className="w-6 h-6 text-purple-500" />
+        <Loader2 className="w-6 h-6 text-[#279989]" />
       </motion.div>
       {message && (
         <span className="ml-3 text-sm text-purple-300">{message}</span>
@@ -76,7 +98,7 @@ export const LoadingButton: React.FC<{
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
           className="absolute inset-0 flex items-center justify-center"
         >
-          <Loader2 className="w-4 h-4" />
+          <Loader2 className="w-4 h-4 text-[#279989]" />
         </motion.div>
       )}
       <span className={cn(loading && "opacity-0")}>
@@ -96,14 +118,7 @@ export const LoadingWrapper: React.FC<{
   return (
     <div className={cn("relative", className)}>
       {loading && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="absolute inset-0 bg-purple-900/20 backdrop-blur-sm flex items-center justify-center z-10"
-        >
-          <Loading message={loadingMessage} />
-        </motion.div>
+        <Loading variant="overlay" message={loadingMessage} />
       )}
       <div className={cn(loading && "opacity-50 pointer-events-none")}>
         {children}
