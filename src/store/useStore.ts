@@ -1,9 +1,25 @@
 // src/store/useStore.ts
 import { create } from 'zustand';
-import { devtools } from 'zustand/middleware';
-import { GlobalState, CalendarEvent, TeamMember, LeaveType } from '@/types/state';
+import { devtools, persist } from 'zustand/middleware';
+import { toast } from '@/components/ui/use-toast';
+import { 
+  GlobalState, 
+  CalendarEvent, 
+  TeamMember, 
+  LeaveType, 
+  LoadingState,
+  ErrorType,
+  Notification
+} from '@/types/state';
 
 interface StoreActions {
+  // Loading State Management
+  setLoadingState: (key: keyof GlobalState['ui']['loading'], status: LoadingState) => void;
+  
+  // Error Management
+  addError: (error: { type: ErrorType; message: string; field?: string }) => void;
+  clearErrors: () => void;
+  
   // Calendar Actions
   setCalendarView: (view: GlobalState['user']['calendar']['view']) => void;
   selectDates: (dates: Date[]) => void;
@@ -19,11 +35,13 @@ interface StoreActions {
   updateTeamAvailability: (memberId: string, dates: Date[]) => void;
   
   // UI State
-  setLoading: (status: boolean, message?: string) => void;
   showModal: (type: GlobalState['ui']['modals']['active'], props?: Record<string, any>) => void;
   hideModal: () => void;
-  addNotification: (notification: GlobalState['ui']['notifications'][0]) => void;
+  addNotification: (notification: Omit<Notification, 'id' | 'timestamp'>) => void;
   clearNotifications: () => void;
+  
+  // Reset
+  reset: () => void;
 }
 
 const initialState: GlobalState = {
@@ -67,8 +85,10 @@ const initialState: GlobalState = {
     },
     notifications: [],
     loading: {
-      status: false,
-      message: undefined,
+      calendar: 'idle',
+      leaves: 'idle',
+      team: 'idle',
+      general: 'idle'
     },
     errors: [],
   },
@@ -76,140 +96,193 @@ const initialState: GlobalState = {
 
 export const useStore = create<GlobalState & StoreActions>()(
   devtools(
-    (set, get) => ({
-      ...initialState,
+    persist(
+      (set, get) => ({
+        ...initialState,
 
-      // Calendar Actions
-      setCalendarView: (view) => 
-        set((state) => ({
-          user: {
-            ...state.user,
-            calendar: {
-              ...state.user.calendar,
-              view,
-            },
-          },
-        })),
+        // Loading State Management
+        setLoadingState: (key, status) =>
+          set((state) => ({
+            ui: {
+              ...state.ui,
+              loading: {
+                ...state.ui.loading,
+                [key]: status
+              }
+            }
+          })),
 
-      selectDates: (dates) =>
-        set((state) => ({
-          user: {
-            ...state.user,
-            calendar: {
-              ...state.user.calendar,
-              selectedDates: dates,
-            },
-          },
-        })),
+        // Error Management
+        addError: (error) =>
+          set((state) => ({
+            ui: {
+              ...state.ui,
+              errors: [...state.ui.errors, error]
+            }
+          })),
 
-      addEvent: (event) =>
-        set((state) => ({
-          user: {
-            ...state.user,
-            calendar: {
-              ...state.user.calendar,
-              events: [...state.user.calendar.events, event],
-            },
-          },
-        })),
+        clearErrors: () =>
+          set((state) => ({
+            ui: {
+              ...state.ui,
+              errors: []
+            }
+          })),
 
-      removeEvent: (eventId) =>
-        set((state) => ({
-          user: {
-            ...state.user,
-            calendar: {
-              ...state.user.calendar,
-              events: state.user.calendar.events.filter((e) => e.id !== eventId),
-            },
-          },
-        })),
-
-      // Leave Management
-      updateLeaveBalance: (type, amount) =>
-        set((state) => ({
-          user: {
-            ...state.user,
-            leaves: {
-              ...state.user.leaves,
-              balances: {
-                ...state.user.leaves.balances,
-                [type]: amount,
+        // Calendar Actions
+        setCalendarView: (view) => 
+          set((state) => ({
+            user: {
+              ...state.user,
+              calendar: {
+                ...state.user.calendar,
+                view,
               },
             },
-          },
-        })),
+          })),
 
-      submitLeaveRequest: (request) => {
-        const newEvent: CalendarEvent = {
-          id: crypto.randomUUID(),
-          ...request,
-        };
-        get().addEvent(newEvent);
-      },
-
-      // Team Management
-      updateTeamMember: (member) =>
-        set((state) => ({
-          user: {
-            ...state.user,
-            team: {
-              members: state.user.team.members.map((m) =>
-                m.id === member.id ? member : m
-              ),
+        selectDates: (dates) =>
+          set((state) => ({
+            user: {
+              ...state.user,
+              calendar: {
+                ...state.user.calendar,
+                selectedDates: dates,
+              },
             },
-          },
-        })),
+          })),
 
-      // UI State Management
-      setLoading: (status, message) =>
-        set((state) => ({
-          ui: {
-            ...state.ui,
-            loading: { status, message },
-          },
-        })),
-
-      showModal: (type, props = {}) =>
-        set((state) => ({
-          ui: {
-            ...state.ui,
-            modals: {
-              active: type,
-              props,
+        addEvent: (event) => {
+          set((state) => ({
+            user: {
+              ...state.user,
+              calendar: {
+                ...state.user.calendar,
+                events: [...state.user.calendar.events, event],
+              },
             },
-          },
-        })),
+          }));
+          toast({
+            title: "Event Added",
+            description: "Calendar event has been successfully added."
+          });
+        },
 
-      hideModal: () =>
-        set((state) => ({
-          ui: {
-            ...state.ui,
-            modals: {
-              active: null,
-              props: {},
+        removeEvent: (eventId) =>
+          set((state) => ({
+            user: {
+              ...state.user,
+              calendar: {
+                ...state.user.calendar,
+                events: state.user.calendar.events.filter((e) => e.id !== eventId),
+              },
             },
-          },
-        })),
+          })),
 
-      addNotification: (notification) =>
-        set((state) => ({
-          ui: {
-            ...state.ui,
-            notifications: [...state.ui.notifications, notification],
-          },
-        })),
+        // Leave Management
+        updateLeaveBalance: (type, amount) =>
+          set((state) => ({
+            user: {
+              ...state.user,
+              leaves: {
+                ...state.user.leaves,
+                balances: {
+                  ...state.user.leaves.balances,
+                  [type]: amount,
+                },
+              },
+            },
+          })),
 
-      clearNotifications: () =>
-        set((state) => ({
-          ui: {
-            ...state.ui,
-            notifications: [],
-          },
-        })),
-    }),
-    {
-      name: 'LeaveManagement-Store',
-    }
+        submitLeaveRequest: (request) => {
+          const newEvent: CalendarEvent = {
+            id: crypto.randomUUID(),
+            ...request,
+            status: 'pending'
+          };
+          get().addEvent(newEvent);
+        },
+
+        // Team Management
+        updateTeamMember: (member) =>
+          set((state) => ({
+            user: {
+              ...state.user,
+              team: {
+                members: state.user.team.members.map((m) =>
+                  m.id === member.id ? member : m
+                ),
+              },
+            },
+          })),
+
+        updateTeamAvailability: (memberId, dates) =>
+          set((state) => ({
+            user: {
+              ...state.user,
+              team: {
+                members: state.user.team.members.map((member) =>
+                  member.id === memberId
+                    ? { ...member, availability: 'unavailable' }
+                    : member
+                ),
+              },
+            },
+          })),
+
+        // UI State Management
+        showModal: (type, props = {}) =>
+          set((state) => ({
+            ui: {
+              ...state.ui,
+              modals: {
+                active: type,
+                props,
+              },
+            },
+          })),
+
+        hideModal: () =>
+          set((state) => ({
+            ui: {
+              ...state.ui,
+              modals: {
+                active: null,
+                props: {},
+              },
+            },
+          })),
+
+        addNotification: (notification) =>
+          set((state) => ({
+            ui: {
+              ...state.ui,
+              notifications: [
+                ...state.ui.notifications,
+                {
+                  id: crypto.randomUUID(),
+                  timestamp: new Date(),
+                  ...notification
+                }
+              ],
+            },
+          })),
+
+        clearNotifications: () =>
+          set((state) => ({
+            ui: {
+              ...state.ui,
+              notifications: [],
+            },
+          })),
+
+        // Reset store
+        reset: () => set(initialState),
+      }),
+      {
+        name: 'leave-planner-store',
+      }
+    )
   )
 );
 
