@@ -1,5 +1,5 @@
 import React from 'react';
-import { Settings } from 'lucide-react';
+import { Settings, MoreHorizontal } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 
 interface LeaveType {
