@@ -1,11 +1,23 @@
 import React, { useState } from 'react';
-import { Bell, Search, User, Settings, Globe } from 'lucide-react';
+import { 
+  Bell, 
+  Search, 
+  User, 
+  Settings, 
+  Globe, 
+  MoreHorizontal,
+  Brain,
+  ChevronRight,
+  Calendar as CalendarIcon
+} from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { useRegion } from "@/contexts/RegionContext";
 import { LeavePlanningWizard } from '@/components/calendar/LeavePlanningWizard';
 import { CalendarGrid } from '@/components/calendar/CalendarGrid';
+import { TeamMemberCard } from '@/components/calendar/TeamMemberCard';
+import { LeaveStats } from '@/components/calendar/LeaveStats';
 
 const Calendar = () => {
   const [selectedDates, setSelectedDates] = useState<number[]>([]);
@@ -15,19 +27,16 @@ const Calendar = () => {
   const { toast } = useToast();
   const { region, setRegion } = useRegion();
   
-  // Team members with leave status
   const teamMembers = [
     { name: "Sarah Chen", status: "On Leave", dates: "Nov 24-26", avatar: "SC" },
     { name: "Mike Ross", status: "Upcoming", dates: "Nov 28-30", avatar: "MR" },
     { name: "Anna Smith", status: "Working", dates: "", avatar: "AS" }
   ];
 
-  const handleDateSelect = (date: number) => {
-    setSelectedDates(prev => {
-      if (prev.includes(date)) {
-        return prev.filter(d => d !== date);
-      }
-      return [...prev, date];
+  const handleAIRecommendation = () => {
+    toast({
+      title: "AI Recommendation",
+      description: "This feature will be available soon!",
     });
   };
 
@@ -81,7 +90,7 @@ const Calendar = () => {
             <CardContent className="p-6">
               <CalendarGrid
                 selectedDates={selectedDates}
-                onDateSelect={handleDateSelect}
+                onDateSelect={setSelectedDates}
                 currentMonth={currentMonth}
                 currentYear={currentYear}
               />
@@ -99,23 +108,7 @@ const Calendar = () => {
               </div>
               <div className="space-y-4">
                 {teamMembers.map((member, index) => (
-                  <div key={index} className="flex items-center justify-between bg-white/5 p-3 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center font-medium">
-                        {member.avatar}
-                      </div>
-                      <div>
-                        <div className="font-medium">{member.name}</div>
-                        <div className="text-sm text-purple-300">{member.dates}</div>
-                      </div>
-                    </div>
-                    <span className={`px-3 py-1 rounded-full text-xs 
-                      ${member.status === "On Leave" ? "bg-blue-500/20 text-blue-300" :
-                        member.status === "Upcoming" ? "bg-purple-500/20 text-purple-300" :
-                        "bg-green-500/20 text-green-300"}`}>
-                      {member.status}
-                    </span>
-                  </div>
+                  <TeamMemberCard key={index} member={member} />
                 ))}
               </div>
             </CardContent>
@@ -124,32 +117,7 @@ const Calendar = () => {
 
         {/* Right Sidebar */}
         <div className="space-y-6">
-          {/* Enhanced Stats */}
-          <Card className="bg-white/5 border-purple-500/20 backdrop-blur-sm">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="font-semibold">Leave Balance</h3>
-                <Settings className="w-5 h-5 text-purple-300 hover:text-white cursor-pointer" />
-              </div>
-              <div className="space-y-4">
-                {Object.entries(leaveTypes).map(([key, value]) => (
-                  <div key={key} className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className={`w-3 h-3 rounded-full ${value.color}`}></div>
-                      <span className="text-sm">{value.label}</span>
-                    </div>
-                    <span className="font-medium">12 days</span>
-                  </div>
-                ))}
-                <div className="pt-4 border-t border-white/10">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-purple-300">Used this year</span>
-                    <span className="font-medium">8 days</span>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <LeaveStats />
 
           {/* Upcoming Leaves */}
           <Card className="bg-white/5 border-purple-500/20 backdrop-blur-sm">
