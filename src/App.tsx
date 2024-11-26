@@ -14,12 +14,13 @@ const RouteLogger = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
 
   React.useEffect(() => {
-    console.log("[Router] Current route:", {
+    console.log("[Router] Navigation:", {
       pathname: location.pathname,
       search: location.search,
       hash: location.hash,
       timestamp: new Date().toISOString(),
-      baseUrl: import.meta.env.VITE_BASE_URL
+      baseUrl: import.meta.env.VITE_BASE_URL,
+      fullUrl: window.location.href
     });
 
     if (location.pathname === '/') {
@@ -31,7 +32,11 @@ const RouteLogger = ({ children }: { children: React.ReactNode }) => {
 };
 
 const App = () => {
-  console.log("[App] Initializing application with React Router");
+  console.log("[App] Initializing with config:", {
+    baseUrl: import.meta.env.VITE_BASE_URL,
+    nodeEnv: process.env.NODE_ENV
+  });
+  
   const baseUrl = import.meta.env.VITE_BASE_URL || '/';
   
   return (

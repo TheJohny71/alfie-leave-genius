@@ -32,9 +32,16 @@ jobs:
       - name: Install dependencies
         run: npm install
         
+      - name: Debug environment
+        run: |
+          echo "Repository: $GITHUB_REPOSITORY"
+          echo "Ref: $GITHUB_REF"
+          echo "Workspace: $GITHUB_WORKSPACE"
+          
       - name: Configure base URL
         run: |
           REPO_NAME="${GITHUB_REPOSITORY#*/}"
+          echo "Setting base URL to /${REPO_NAME}/"
           echo "VITE_BASE_URL=/${REPO_NAME}/" >> $GITHUB_ENV
         
       - name: Build
