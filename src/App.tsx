@@ -12,20 +12,19 @@ const queryClient = new QueryClient();
 
 const RouteLogger = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
-  const navigate = useNavigate();
-
-  console.log("[Router] Current route:", {
-    pathname: location.pathname,
-    search: location.search,
-    hash: location.hash,
-    timestamp: new Date().toISOString()
-  });
 
   React.useEffect(() => {
+    console.log("[Router] Current route:", {
+      pathname: location.pathname,
+      search: location.search,
+      hash: location.hash,
+      timestamp: new Date().toISOString()
+    });
+
     if (location.pathname === '/') {
       console.log("[Router] Ensuring welcome page is shown");
     }
-  }, [location.pathname]);
+  }, [location]);
 
   return <>{children}</>;
 };
@@ -34,23 +33,25 @@ const App = () => {
   console.log("[App] Initializing application with React Router");
   
   return (
-    <QueryClientProvider client={queryClient}>
-      <RegionProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <RouteLogger>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/calendar" element={<Calendar />} />
-                <Route path="*" element={<Navigate to="/" replace />} />
-              </Routes>
-            </RouteLogger>
-          </BrowserRouter>
-        </TooltipProvider>
-      </RegionProvider>
-    </QueryClientProvider>
+    <React.StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <RegionProvider>
+          <TooltipProvider>
+            <BrowserRouter>
+              <RouteLogger>
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/calendar" element={<Calendar />} />
+                  <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+              </RouteLogger>
+            </BrowserRouter>
+            <Toaster />
+            <Sonner />
+          </TooltipProvider>
+        </RegionProvider>
+      </QueryClientProvider>
+    </React.StrictMode>
   );
 };
 
