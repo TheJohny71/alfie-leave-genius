@@ -10,7 +10,7 @@
     <link rel="icon" type="image/x-icon" href="./favicon.ico">
     <script type="module">
       // Dynamically set base href based on environment
-      const baseUrl = import.meta.env?.VITE_BASE_URL || '/';
+      const baseUrl = import.meta?.env?.VITE_BASE_URL || '/';
       document.write(`<base href="${baseUrl}">`);
       console.log('[Index] Base URL configured:', baseUrl);
     </script>
@@ -18,7 +18,7 @@
 
   <body>
     <div id="root"></div>
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+    <script type="module" src="https://cdn.gpteng.co/gptengineer.js"></script>
     <script type="module" src="./src/main.tsx"></script>
   </body>
 </html>

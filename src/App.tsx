@@ -26,7 +26,7 @@ const RouteLogger = ({ children }: { children: React.ReactNode }) => {
       search: location.search,
       hash: location.hash,
       timestamp: new Date().toISOString(),
-      baseUrl: import.meta.env.VITE_BASE_URL,
+      baseUrl: import.meta?.env?.VITE_BASE_URL,
       fullUrl: window.location.href,
       origin: window.location.origin
     });
@@ -41,13 +41,13 @@ const RouteLogger = ({ children }: { children: React.ReactNode }) => {
 
 const App = () => {
   console.log("[App] Initializing with config:", {
-    baseUrl: import.meta.env.VITE_BASE_URL,
+    baseUrl: import.meta?.env?.VITE_BASE_URL,
     nodeEnv: process.env.NODE_ENV,
     origin: window.location.origin,
     href: window.location.href
   });
   
-  const baseUrl = import.meta.env.VITE_BASE_URL || '/';
+  const baseUrl = import.meta?.env?.VITE_BASE_URL || '/';
   
   return (
     <QueryClientProvider client={queryClient}>
