@@ -33,7 +33,7 @@ export const LeavePlanningWizard = () => {
   const [totalDays, setTotalDays] = React.useState(20);
   const [plannedDays, setPlannedDays] = React.useState(5);
   const { toast } = useToast();
-  const { mutate: submitLeaveRequest, isLoading } = useLeaveRequest();
+  const { mutate: submitLeaveRequest, isPending } = useLeaveRequest();
   const { calendar } = useStore((state) => state.user);
 
   console.log("[LeavePlanningWizard] Rendering wizard at step:", currentStep);
@@ -110,7 +110,7 @@ export const LeavePlanningWizard = () => {
             </Button>
             <Button
               onClick={handleNext}
-              disabled={currentStep === steps.length - 1 || isLoading}
+              disabled={currentStep === steps.length - 1 || isPending}
               className="flex items-center space-x-2 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
             >
               <span>{currentStep === steps.length - 1 ? 'Finish' : 'Next'}</span>
