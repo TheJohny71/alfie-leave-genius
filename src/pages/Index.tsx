@@ -14,11 +14,11 @@ const Index = () => {
   return (
     <div className="min-h-screen flex flex-col items-center relative z-10 overflow-hidden">
       {/* Animated Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#2D2D2D] via-[#1E1E1E] to-[#000000] animate-gradient">
+      <div className="absolute inset-0 bg-gradient-to-br from-[#1E1E2C] via-[#2D1F3D] to-[#1A1A2E] animate-gradient">
         <div className="absolute inset-0 opacity-30">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_500px_at_50%_50%,#3a1f71,transparent)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_400px_at_70%_20%,#4b2c8f,transparent)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_600px_at_30%_80%,#2a1854,transparent)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_500px_at_50%_50%,#4B2D8B,transparent)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_400px_at_70%_20%,#6E3FAC,transparent)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_600px_at_30%_80%,#3D2066,transparent)]" />
         </div>
         <div className="absolute inset-0 backdrop-blur-[100px] mix-blend-overlay opacity-50" />
       </div>
