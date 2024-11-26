@@ -6,6 +6,8 @@ import { ChevronRight, ChevronLeft } from "lucide-react";
 import { useRegion } from "@/contexts/RegionContext";
 import { WizardStepIndicator } from "./WizardStepIndicator";
 import { WizardStep } from "./WizardStep";
+import { useStore } from "@/store/useStore";
+import { useLeaveRequest } from "@/hooks/useLeaveRequest";
 
 const steps = [
   {
@@ -31,14 +33,17 @@ export const LeavePlanningWizard = () => {
   const [totalDays, setTotalDays] = React.useState(20);
   const [plannedDays, setPlannedDays] = React.useState(5);
   const { toast } = useToast();
+  const { mutate: submitLeaveRequest, isLoading } = useLeaveRequest();
+  const { calendar } = useStore((state) => state.user);
 
   console.log("[LeavePlanningWizard] Rendering wizard at step:", currentStep);
 
   const handleExport = () => {
     console.log("[LeavePlanningWizard] Exporting leave schedule");
-    toast({
-      title: "Schedule Exported",
-      description: "Your leave schedule has been exported successfully.",
+    submitLeaveRequest({
+      type: 'annual',
+      startDate: calendar.selectedDates[0],
+      endDate: calendar.selectedDates[calendar.selectedDates.length - 1],
     });
   };
 
@@ -105,7 +110,7 @@ export const LeavePlanningWizard = () => {
             </Button>
             <Button
               onClick={handleNext}
-              disabled={currentStep === steps.length - 1}
+              disabled={currentStep === steps.length - 1 || isLoading}
               className="flex items-center space-x-2 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
             >
               <span>{currentStep === steps.length - 1 ? 'Finish' : 'Next'}</span>
