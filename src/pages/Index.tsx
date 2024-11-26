@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Calendar, Globe, Users, ArrowRight, LogIn } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { useNavigate } from 'react-router-dom';
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import AboutSection from '@/components/AboutSection';
 
 const Index = () => {
   console.log("[Index] Rendering welcome page");
@@ -23,9 +25,16 @@ const Index = () => {
           <span className="text-xl text-white font-bold tracking-tight">alfie</span>
         </div>
         <div className="flex items-center space-x-4">
-          <button className="px-5 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg text-purple-200 hover:text-white transition-all duration-300">
-            About
-          </button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <button className="px-5 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg text-purple-200 hover:text-white transition-all duration-300">
+                About
+              </button>
+            </DialogTrigger>
+            <DialogContent className="max-w-4xl bg-transparent border-0 p-0">
+              <AboutSection />
+            </DialogContent>
+          </Dialog>
           <button className="px-5 py-2 bg-white text-purple-900 rounded-lg font-medium hover:bg-purple-100 transition-all duration-300 flex items-center space-x-2">
             <LogIn className="w-4 h-4" />
             <span>Sign In</span>
